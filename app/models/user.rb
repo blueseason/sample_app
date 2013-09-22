@@ -10,6 +10,7 @@
 #
 
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy
   attr_accessible :email, :name, :password, :password_confirmation
   has_secure_password
   validates :name, presence: true, length: { maximum: 50 }
@@ -29,6 +30,10 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest(token.to_s)
   end
 
+  def feed
+    microposts
+  end
+  
   private
 
     def create_remember_token
